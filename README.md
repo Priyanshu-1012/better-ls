@@ -2,7 +2,6 @@
 A visually appealing ls command replacement script written in Bash, providing a colorful and informative file listing.
 
 *prequisite* : [Nerd Fonts](www.nerdfonts.com) installed.
-
 <br>
 <br>
 
@@ -14,7 +13,7 @@ A visually appealing ls command replacement script written in Bash, providing a 
 ```bash
 
 bl() {
-bash path/to/btrls.sh file "$@"
+bash path/to/btrls.sh/file "$@"
 }
 
 ```
