@@ -192,6 +192,9 @@ format_columns() {
     fi
 
     local color="\033[0m"  # Default color
+     if (( ${#name} > padding-4 )); then
+      name="${name:0:padding-3}..."
+    fi
 
     # Define color based on file type
     case "$type" in
