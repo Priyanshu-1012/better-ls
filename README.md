@@ -1,7 +1,7 @@
 # better-ls
 A visually appealing ls command replacement script written in Bash, providing a colorful and informative file listing.
 
-*prequisite* : <a href="www.nerdfonts.com">Nerd Fonts</a>
+*prequisite* : [Nerd Fonts](www.nerdfonts.com) installed.
 
 <br>
 <br>
