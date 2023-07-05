@@ -3,6 +3,7 @@
 # Define icons for different file types
 declare -A icons=(
   ["folder"]="\033[1;34m "
+  [".asm"]=" "
   [".awk"]=" "
   [".bash"]=" "
   [".bash_profile"]=" "
@@ -25,6 +26,8 @@ declare -A icons=(
   [".doc"]=" "
   [".docx"]=" "
   [".ejs"]=" "
+  [".el"]=" "
+  [".emacs"]=" "
   [".eot"]=" "
   [".epub"]=" "
   [".erb"]=" "
@@ -50,6 +53,7 @@ declare -A icons=(
   [".htm"]=" "
   [".html"]=" "
   [".ini"]=" "
+  [".inputrc"]=" "
   [".ipynb"]=" "
   [".jad"]=" "
   [".java"]=" "
@@ -62,13 +66,17 @@ declare -A icons=(
   [".kts"]="󰜪 "
   [".latex"]=" "
   ["LICENSE"]=" "
-  [".log"]=" "
+  [".log"]=" "
   [".lua"]=" "
   [".lz"]=" "
   [".lrz"]=" "
   [".md"]=" "
+  [".mk"]=" "
+  [".make"]=" "
+  [".mk"]=" "
   [".mp3"]=" "
   [".mp4"]=" "
+  [".org"]=" "
   [".otf"]=" "
   [".pdf"]=" "
   [".patch"]=" "
@@ -94,7 +102,7 @@ declare -A icons=(
   [".scala"]=" "
   [".sh"]=" "
   [".sql"]=" "
-  [".sv"]="󰘚 "
+  [".sv"]="󰍛 "
   [".svg"]=" "
   [".swift"]=" "
   [".tar"]=" "
@@ -103,7 +111,7 @@ declare -A icons=(
   [".tbz2"]=" "
   [".tgz"]=" "
   [".tex"]=" "
-  [".tcl"]="󰛓 "
+  [".tcl"]=" "
   [".toml"]=" "
   [".ts"]=" "
   [".ttf"]=" "
@@ -135,7 +143,7 @@ declare -A icons=(
 declare -A directory_icons=(
   ["Pictures"]="\033[1;34m󰉏 "
   ["Downloads"]="\033[1;34m󰉍 "
-  [".git"]="\033[1;31m "
+  [".git"]="\033[1;31m "
   [".ssh"]="\033[1;34m󰢬 "
   ["Music"]="\033[1;34m󱍙 "
   ["Desktop"]="\033[1;34m "
@@ -146,6 +154,7 @@ declare -A directory_icons=(
   ["Github"]="\033[1;37m "
   ["GitHub"]="\033[1;37m "
   ["Videos"]="\033[1;34m󰃽 "
+  [".cache"]="\033[1;34m󰴌 "
 )
 
 # Default icon for files with unknown extensions
@@ -154,7 +163,7 @@ default_icon="\033[0;37m \033[0m"
 
 
 columns=3
-padding=35
+padding=30
 # Parse command-line options
 while getopts "c:" opt; do
   case $opt in
@@ -192,7 +201,7 @@ format_columns() {
     fi
 
     local color="\033[0m"  # Default color
-     if (( ${#name} > padding-4 )); then
+     if (( ${#name} > padding-3 )); then
       name="${name:0:padding-3}..."
     fi
 
@@ -213,8 +222,13 @@ format_columns() {
       .viminfo) color="\033[0;36m";;
       .vimrc) color="\033[0;36m";;
       .gitconfig)color="\033[0;31m";;
+      .pdf)color="\033[0;31m";;
       .v)color="\033[0;35m";;
       .sv)color="\033[0;35m";;
+      .el)color="\033[0;35m";;
+      .emacs)color="\033[0;35m";;
+      .org)color="\033[0;35m";;
+      .go)color="\033[0;36m";;
       .gz)color="\033[1;31m";;
         .tar)color="\033[1;31m";;
         .zip)color="\033[1;31m";;
