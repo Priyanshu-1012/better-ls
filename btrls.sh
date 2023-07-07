@@ -86,6 +86,8 @@ declare -A icons=(
   [".png"]=" "
   [".ppt"]=" "
   [".pptx"]=" "
+  [".ps1"]=" "
+  [".ps1d"]=" "
   [".py"]=" "
   [".python_history"]=" "
   [".r"]=" "
@@ -149,9 +151,12 @@ declare -A directory_icons=(
   ["Desktop"]="\033[1;34m "
   [".vscode"]="\033[0;35m󰨞 \033[1m"
   [".config"]="\033[1;34m "
+  ["config"]="\033[1;34m "
+  ["configs"]="\033[1;34m "
   ["bin"]="\033[1;34m "
   ["github"]="\033[1;37m "
-  ["Github"]="\033[1;37m "
+  ["Github"]="\033[1;37m " 
+  [".github"]="\033[1;37m "
   ["GitHub"]="\033[1;37m "
   ["Videos"]="\033[1;34m󰃽 "
   [".cache"]="\033[1;34m󰴌 "
@@ -163,7 +168,7 @@ default_icon="\033[0;37m \033[0m"
 
 
 columns=3
-padding=30
+padding=20
 # Parse command-line options
 while getopts "c:" opt; do
   case $opt in
