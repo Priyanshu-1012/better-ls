@@ -6,6 +6,7 @@ declare -A icons=(
   [".asm"]=" "
   [".awk"]=" "
   [".bash"]=" "
+  [".bash_aliases"]=" "
   [".bash_profile"]=" "
   [".bash_history"]=" "
   [".bashrc"]=" "
