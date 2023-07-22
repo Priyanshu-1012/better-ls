@@ -20,7 +20,7 @@ installed.
    
    echo 'bl(){' >> ~/.bash_aliases && echo '    bash ~/btrls.sh "$@"' >> ~/.bash_aliases && echo '}' >> ~/.bash_aliases
    ``` 
-6. Now you can run better-ls by simply typing ```bl``` command in your terminal
+6. Restart your terminal and now you can run better-ls by simply typing ```bl``` command in your terminal
 
 
 ## Flags
