@@ -2,7 +2,7 @@
 
 # Define icons for different file types
 declare -A icons=(
-  ["folder"]="\033[1;34m "
+  ["folder"]="\033[1;96m "
   [".asm"]=" "
   [".awk"]=" "
   [".bash"]=" "
@@ -73,13 +73,14 @@ declare -A icons=(
   [".lrz"]=" "
   [".md"]=" "
   [".mk"]=" "
+  ["Makefile"]=" "
   [".make"]=" "
   [".mk"]=" "
   [".mp3"]=" "
   [".mp4"]=" "
   [".org"]=" "
   [".otf"]=" "
-  [".pdf"]=" "
+  [".pdf"]=" "
   [".patch"]=" "
   [".perl"]=" "
   [".php"]=" "
@@ -144,23 +145,23 @@ declare -A icons=(
 
 # Define icons and colors for specific directory names
 declare -A directory_icons=(
-  ["Pictures"]="\033[1;34m󰉏 "
-  ["Downloads"]="\033[1;34m󰉍 "
+  ["Pictures"]="\033[1;96m󰉏 "
+  ["Downloads"]="\033[1;96m󰉍 "
   [".git"]="\033[1;31m "
-  [".ssh"]="\033[1;34m󰢬 "
-  ["Music"]="\033[1;34m󱍙 "
-  ["Desktop"]="\033[1;34m "
+  [".ssh"]="\033[1;96m󰢬 "
+  ["Music"]="\033[1;96m󱍙 "
+  ["Desktop"]="\033[1;96m "
   [".vscode"]="\033[0;35m󰨞 \033[1m"
-  [".config"]="\033[1;34m "
-  ["config"]="\033[1;34m "
-  ["configs"]="\033[1;34m "
-  ["bin"]="\033[1;34m "
+  [".config"]="\033[1;96m "
+  ["config"]="\033[1;96m "
+  ["configs"]="\033[1;96m "
+  ["bin"]="\033[1;96m "
   ["github"]="\033[1;37m "
   ["Github"]="\033[1;37m " 
   [".github"]="\033[1;37m "
   ["GitHub"]="\033[1;37m "
-  ["Videos"]="\033[1;34m󰃽 "
-  [".cache"]="\033[1;34m󰴌 "
+  ["Videos"]="\033[1;96m󰃽 "
+  [".cache"]="\033[1;96m󰴌 "
 )
 
 # Default icon for files with unknown extensions
@@ -169,7 +170,7 @@ default_icon="\033[0;37m \033[0m"
 
 
 columns=3
-padding=20
+padding=24
 # Parse command-line options
 while getopts "c:" opt; do
   case $opt in
@@ -188,7 +189,7 @@ while getopts "c:" opt; do
     padding=40
     elif
     ((columns==5)); then
-    padding=22
+    padding=23
     else
 padding=$((35 / 3 * columns))
 fi
@@ -207,14 +208,33 @@ format_columns() {
     fi
 
     local color="\033[0m"  # Default color
-     if (( ${#name} > padding-3 )); then
-      name="${name:0:padding-3}..."
-    fi
+    local min_length=10  # Minimum length to ensure space for ".." and extension
+    local max_length=$(( padding - 3 ))  # Leaving space for ".." and file extension
 
+    if (( ${#name} > max_length )); then
+      local basename="${name%.*}"  # Extracting the filename without extension
+      local extension="${name##*.}"  # Extracting the file extension
+      local middle=".."
+      local extension_length=${#extension}
+
+      # Adjust the max_length to accommodate the beginning of the filename
+      local available_length=$(( max_length - extension_length - ${#middle} ))
+
+      if (( available_length < min_length )); then
+        # If even the beginning is too long, truncate the basename
+        basename="${basename:0:$(( min_length - available_length ))}"
+      else
+        # Truncate the end of the basename to fit the available length
+        basename="${basename:0:$available_length}"
+      fi
+
+      # Concatenate the truncated basename with ".." and the extension
+      name="$basename$middle.$extension"
+    fi
     # Define color based on file type
     case "$type" in
       folder) 
-        color="\033[1;34m"  # Default folder color
+        color="\033[1;96m"  # Default folder color
         # Check if a specific icon and color are defined for the directory name
         if [[ -v directory_icons[$name] ]]; then
           icon="${directory_icons[$name]}"
@@ -228,6 +248,7 @@ format_columns() {
       .viminfo) color="\033[0;36m";;
       .vimrc) color="\033[0;36m";;
       .gitconfig)color="\033[0;31m";;
+      .json)color="\033[0;33m";;
       .pdf)color="\033[0;31m";;
       .v)color="\033[0;35m";;
       .sv)color="\033[0;35m";;
@@ -296,6 +317,7 @@ done < <(find . -maxdepth 1 ! -path . -print0 | LC_ALL=C sort -z)
 
 # Concatenate directories, files, dotfolders, and dotfiles arrays
 items=("${directories[@]}" "${dotfolders[@]}" "${files[@]}" "${dotfiles[@]}")
+
 
 # Format and display the items in columns
 format_columns
