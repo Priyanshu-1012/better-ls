@@ -10,6 +10,7 @@ declare -A icons=(
   [".bash_profile"]=" "
   [".bash_history"]=" "
   [".bashrc"]=" "
+  [".bin"]=" "
   [".bmp"]=" "
   [".bz"]=" "
   [".bz2"]=" "
