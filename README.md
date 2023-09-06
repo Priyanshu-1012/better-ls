@@ -24,7 +24,9 @@ installed.
 
 
 ## Flags
-#### -c flag: sets the number of columns for list formatting. For e.g., ```bl -c 2``` formats the list into 2 columns. The default value is 3 columns when no flag is specified. <br>
-#### -a flag: shows hidden files too.
+#### -c flag: sets the number of columns for list formatting. For e.g., ```bl -c2``` formats the list into 2 columns. The default value is 3 columns when no flag is specified. <br>
+#### -a flag: shows hidden files too. <br>
+e.g. ```bl -c5 -a``` will show all files and folder(hidden too) in 5 columns
+
 
 ...work in progress
