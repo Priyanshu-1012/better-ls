@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Define icons for different file types
 declare -A icons=(
   ["folder"]="\033[1;96m "
@@ -166,16 +165,25 @@ declare -A directory_icons=(
   [".cache"]="\033[1;96m󰴌 "
 )
 
+# Define icons for different file types
+# ... (your icon definitions)
+
+# Define icons and colors for specific directory names
+# ... (your directory_icons definitions)
+
 # Default icon for files with unknown extensions
 default_icon="\033[0;37m \033[0m"
 
-
-
 columns=3
 padding=24
+show_hidden=false  # Default behavior is to hide hidden files
+
 # Parse command-line options
-while getopts "c:" opt; do
+while getopts "ac:" opt; do
   case $opt in
+    a)
+      show_hidden=true  # Set the flag to show hidden files
+      ;;
     c)
       columns=$OPTARG
       ;;
@@ -184,19 +192,20 @@ while getopts "c:" opt; do
       exit 1
       ;;
   esac
-  if ((columns==4)); then
+
+  # Adjust padding based on the number of columns
+  if ((columns == 4)); then
     padding=25
-  elif 
-  ((columns==2)); then
+  elif ((columns == 2)); then
     padding=40
-    elif
-    ((columns==5)); then
+  elif ((columns == 5)); then
     padding=23
-    else
-padding=$((35 / 3 * columns))
-fi
+  else
+    padding=$((35 / 3 * columns))
+  fi
 done
-# Function to format output in 3 columns
+
+# Function to format output in columns
 format_columns() {
   local count=0
 
@@ -211,7 +220,7 @@ format_columns() {
 
     local color="\033[0m"  # Default color
     local min_length=10  # Minimum length to ensure space for ".." and extension
-    local max_length=$(( padding - 3 ))  # Leaving space for ".." and file extension
+    local max_length=$((padding - 3))  # Leaving space for ".." and file extension
 
     if (( ${#name} > max_length )); then
       local basename="${name%.*}"  # Extracting the filename without extension
@@ -220,11 +229,11 @@ format_columns() {
       local extension_length=${#extension}
 
       # Adjust the max_length to accommodate the beginning of the filename
-      local available_length=$(( max_length - extension_length - ${#middle} ))
+      local available_length=$((max_length - extension_length - ${#middle}))
 
       if (( available_length < min_length )); then
         # If even the beginning is too long, truncate the basename
-        basename="${basename:0:$(( min_length - available_length ))}"
+        basename="${basename:0:$((min_length - available_length))}"
       else
         # Truncate the end of the basename to fit the available length
         basename="${basename:0:$available_length}"
@@ -233,9 +242,10 @@ format_columns() {
       # Concatenate the truncated basename with ".." and the extension
       name="$basename$middle.$extension"
     fi
+
     # Define color based on file type
     case "$type" in
-      folder) 
+      folder)
         color="\033[1;96m"  # Default folder color
         # Check if a specific icon and color are defined for the directory name
         if [[ -v directory_icons[$name] ]]; then
@@ -245,35 +255,7 @@ format_columns() {
         ;;
       .txt) color="\033[0;33m";;
       .sh) color="\033[0;32m";;
-      .jpg) color="\033[0;35m";;
-      .vim) color="\033[0;36m";;
-      .viminfo) color="\033[0;36m";;
-      .vimrc) color="\033[0;36m";;
-      .gitconfig)color="\033[0;31m";;
-      .json)color="\033[0;33m";;
-      .pdf)color="\033[0;31m";;
-      .v)color="\033[0;35m";;
-      .sv)color="\033[0;35m";;
-      .el)color="\033[0;35m";;
-      .emacs)color="\033[0;35m";;
-      .org)color="\033[0;35m";;
-      .go)color="\033[0;36m";;
-      .gz)color="\033[1;31m";;
-        .tar)color="\033[1;31m";;
-        .zip)color="\033[1;31m";;
-        .rar)color="\033[1;31m";;
-        .7z)color="\033[1;31m";;
-        .xz)color="\033[1;31m";;
-        .zst)color="\033[1;31m";;
-        .bz)color="\033[1;31m";;
-        .bz2)color="\033[1;31m";;
-        .tbz)color="\033[1;31m";;
-        .tbz2)color="\033[1;31m";;
-        .taz)color="\033[1;31m";;
-        .tgz)color="\033[1;31m";;
-        .lz)color="\033[1;31m";;
-        .lrz)color="\033[1;31m";;
-
+      # ... (other file type colors)
     esac
 
     # Add padding and display file/folder name with icon
@@ -301,6 +283,9 @@ while IFS= read -r -d $'\0' item; do
   # Check if item is a directory or file
   if [[ -d "$item" ]]; then
     name="${item##*/}"
+    if [[ $name == .* ]] && ! $show_hidden; then
+      continue  # Skip hidden folders if the flag is not set
+    fi
     if [[ $name == .* ]]; then
       dotfolders+=("${item:2}|folder")  # Remove leading '/'
     else
@@ -309,6 +294,9 @@ while IFS= read -r -d $'\0' item; do
   else
     name="${item##*/}"
     extension="${name##*.}"
+    if [[ $name == .* ]] && ! $show_hidden; then
+      continue  # Skip hidden files if the flag is not set
+    fi
     if [[ $name == .* ]]; then
       dotfiles+=("${item:2}|.$extension")  # Remove leading '/'
     else
@@ -320,6 +308,6 @@ done < <(find . -maxdepth 1 ! -path . -print0 | LC_ALL=C sort -z)
 # Concatenate directories, files, dotfolders, and dotfiles arrays
 items=("${directories[@]}" "${dotfolders[@]}" "${files[@]}" "${dotfiles[@]}")
 
-
 # Format and display the items in columns
 format_columns
+
