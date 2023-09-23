@@ -202,7 +202,7 @@ while getopts "ac:" opt; do
   elif ((columns == 5)); then
     padding=23
   else
-    padding=$((35 / 3 * columns))
+    padding=$((35 / 3 * columns - 13))
   fi
 done
 
